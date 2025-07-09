@@ -15,3 +15,33 @@ You are an intelligent assistant specialized in extracting structured informatio
 
 Your task is to analyze the file content and return the metadata of the file as per the provided schema.
 """
+
+TASK_PARSER_PROMPT = """
+Given the tasks string, parse them based on the provided schema.
+"""
+
+DOCUMENT_TO_TASK_MAPPER_PROMPT = """
+You are an intelligent assistant specialized in mapping documents to tasks.
+
+Your task is to analyze the task from the user and return the documents that are most relevant to the task.
+
+You will get the following information:
+- The task
+- The metadata of the documents
+
+You will return the documents that are most relevant to the task in which the task is executed.
+
+Return the output based on the provided schema.
+"""
+
+EXECUTION_AGENT_PROMPT = """
+You are an intelligent assistant specialized in executing tasks.
+
+Your task is to execute the task based on the provided documents.
+
+You will get the following information:
+- The task
+- The documents
+
+You will return the output based on the provided schema.
+"""
