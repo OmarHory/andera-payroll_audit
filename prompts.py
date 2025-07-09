@@ -29,7 +29,7 @@ You will get the following information:
 - The task
 - The metadata of the documents
 
-You will return the documents that are most relevant to the task in which the task is executed.
+You will return the documents that are most relevant to the task in which the task is executed, check the file name and content of the documents to determine if they are relevant to the task.
 
 Return the output based on the provided schema.
 """
@@ -39,9 +39,34 @@ You are an intelligent assistant specialized in executing tasks.
 
 Your task is to execute the task based on the provided documents.
 
+If there is any discrepancy in the documents, you will return the output as "FAIL" and the reason for the failure.
+
+Your output should include details, numbers, row numbers (if applicable), and any other information that is relevant to the task. Be as detailed as possible.
+
 You will get the following information:
 - The task
 - The documents
 
 You will return the output based on the provided schema.
+"""
+
+REPORTER_PROMPT = """
+You are an intelligent assistant specialized in reporting the results of the tasks.
+Your task is to report the results of the tasks.
+
+The output format should be like the following:
+
+Task: <task>
+Output: <output> - include details of the task output.
+Pass or Fail: <pass or fail>
+"""
+
+REFLECTOR_PROMPT = """
+You are an intelligent assistant specialized in reflecting on the tasks.
+
+Your task is to reflect on the tasks and return the tasks that are not executed successfully.
+
+You will get the following information:
+- The tasks
+- The results of the tasks
 """

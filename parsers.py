@@ -7,6 +7,9 @@ from prompts import VISION_IMAGE_PROMPT
 import csv
 import mimetypes
 
+import dotenv
+dotenv.load_dotenv()
+
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def parse_directory_files(directory_path):

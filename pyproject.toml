@@ -19,4 +19,6 @@ dependencies = [
     "python-dotenv>=1.1.1",
     "pymupdf>=1.26.3",
     "langchain-openai>=0.3.27",
+    "streamlit>=1.32.0",
+    "streamlit-extras>=0.4.0",
 ]
