@@ -1,6 +1,7 @@
 import streamlit as st
 import json
 from ui.utils import format_execution_time
+from ui.markdown_viewer import render_markdown, render_report_section
 
 
 def render_header():
@@ -96,7 +97,10 @@ def render_execution_results(results):
     
     if results.get("success", False):
         st.markdown("### 📋 Final Report")
-        st.markdown(results.get("report", "No report available"))
+        # Use our custom renderer for the report text
+        report_text = results.get("report", "No report available")
+        # This will handle special characters and proper spacing
+        render_markdown(report_text)
         
         if results.get("execution_details"):
             st.markdown("### 🔍 Detailed Task Results")
@@ -106,7 +110,8 @@ def render_execution_results(results):
                     status_color = "green" if detail['status'] == "PASS" else "red"
                     st.markdown(f"**Status:** :{status_color}[{detail['status']}]")
                     st.markdown(f"**Output:**")
-                    st.write(detail['output'])
+                    # Use our custom markdown renderer for consistent formatting
+                    render_markdown(detail['output'])
         
         with st.expander("🔧 Raw Results (Debug)", expanded=False):
             st.json(results)

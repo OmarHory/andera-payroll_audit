@@ -41,4 +41,23 @@ def setup_data_directory():
     data_dir = Path("data")
     if not data_dir.exists():
         data_dir.mkdir(exist_ok=True)
-    return data_dir 
+    return data_dir
+
+
+def format_markdown(text):
+    """
+    Format text to render properly as markdown in Streamlit.
+    Ensures special characters and spacing are preserved correctly.
+    """
+    if text is None:
+        return "No content available"
+    
+    # Replace problematic sequences that might be causing rendering issues
+    # Ensure spaces around parentheses and special characters are preserved
+    formatted_text = text.replace("(", " (")
+    formatted_text = formatted_text.replace("+", " + ")
+    
+    # Fix common markdown rendering issues
+    formatted_text = formatted_text.replace("  ", " ")
+    
+    return formatted_text
