@@ -8,7 +8,7 @@ Prepare .env file with the following variables:
 OPENAI_API_KEY=
 REDIS_URI = "redis://localhost:6379/0" # Redis URI
 MODEL_NAME=o4-mini # Reasoning model
-REASONING_EFFORTS="high" (or None if you are using a non-reasoning model like gpt-4.1, gpt-4o and the mini ones.)
+REASONING_EFFORTS="high"  # (or None if you are using a non-reasoning model like gpt-4.1, gpt-4o and the mini ones.)
 ```
 
 ```bash
@@ -32,6 +32,8 @@ tail -f logs/service.log
 tail -f logs/ui.log
 ```
 
+Note:
+- When you upload the file, it autocreates a directory locally called `data` and stores the files there with a uuid name for each session.
 
 ## UI Usage
 
@@ -42,3 +44,4 @@ tail -f logs/ui.log
 - Wait for the audit to finish.
 - The results will be displayed in the UI.
 - You can Export the results as a JSON file.
+- Give the UI like 5-10 seconsds to render :D 
