@@ -39,6 +39,13 @@ Note:
 
 - The UI is a Streamlit app that allows you to upload files and run the audit.
 - Upload files and click on "Lock & Load Files" to save them.
+- The Upload accepts the following file types:
+    - .png
+    - .jpg
+    - .jpeg
+    - .pdf
+    - .csv
+    - .xlsx
 - Write your tasks in the text area and click on "LAUNCH AI AUDIT" to run the audit.
 - Click on "LAUNCH AI AUDIT" to run the audit.
 - Wait for the audit to finish.
