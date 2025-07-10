@@ -9,9 +9,9 @@ from service.nodes import (
     tasks_parser, 
     document_to_task_mapper, 
     execution_agent, 
-    reflector, 
     reporter, 
-    should_continue
+    relevance_to_SOX_and_financial_standards,
+    is_relevant
 )
 import os
 
@@ -21,15 +21,15 @@ def build_graph():
     
     try:
         builder = StateGraph(State)
-        
+        builder.add_node("relevance_to_sox_and_financial_standards", relevance_to_SOX_and_financial_standards)
         builder.add_node("metadata_extractor", metadata_extractor)
         builder.add_node("tasks_parser", tasks_parser)
         builder.add_node("document_to_task_mapper", document_to_task_mapper)
         builder.add_node("execution_agent", execution_agent)
-        # builder.add_node("reflector", reflector)
         builder.add_node("reporter", reporter)
 
-        builder.add_edge(START, "metadata_extractor")
+        builder.add_edge(START, "relevance_to_sox_and_financial_standards")
+        builder.add_conditional_edges("relevance_to_sox_and_financial_standards", is_relevant, {"stop": "reporter", "continue": "metadata_extractor"})
         builder.add_edge("metadata_extractor", "tasks_parser")
         builder.add_edge("tasks_parser", "document_to_task_mapper")
         builder.add_edge("document_to_task_mapper", "execution_agent")
@@ -86,11 +86,22 @@ def invoke(thread_id: str, data_path: str, tasks: List[str]) -> dict:
             config={"configurable": {"thread_id": thread_id}}
         )
         
+        
         execution_time = time.time() - start_time
         logger.info(f"⏱️ Graph execution completed in {execution_time:.2f} seconds")
         
         success = bool(result["reporter"] and len(result["execution_task_output"]) > 0)
         logger.info(f"✅ Execution success: {success}")
+
+        if not result['relevance_to_sox_and_financial_standards'].is_relevant:
+            return {
+                "success": True,
+                "report": result['reporter'],
+                "execution_time": time.time() - start_time,
+                "documents_processed": None,
+                "tasks_count": None,
+                "execution_details": None,
+            }
         
         execution_details = []
         for task_output in result["execution_task_output"]:

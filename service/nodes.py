@@ -1,13 +1,14 @@
 import os
 from typing import List
-from states import State, DocMetadata, Tasks, DocumentWithMetadata, DocumentToTaskMapper, ExecutionAgent, Reporter
+from states import State, DocMetadata, Tasks, DocumentWithMetadata, DocumentToTaskMapper, ExecutionAgent, Reporter, RelevanceToSoxAndFinancialStandards
 from prompts import (
     METADATA_EXTRACTOR_PROMPT, 
     TASK_PARSER_PROMPT, 
     DOCUMENT_TO_TASK_MAPPER_PROMPT,
     EXECUTION_AGENT_PROMPT,
     REPORTER_PROMPT,
-    REFLECTOR_PROMPT
+    REFLECTOR_PROMPT,
+    RELEVANCE_TO_SOX_AND_FINANCIAL_STANDARDS_PROMPT,
 )
 from parsers import parse_directory_files
 from langchain_core.messages import SystemMessage, HumanMessage
@@ -19,6 +20,18 @@ dotenv.load_dotenv()
 
 model = ChatOpenAI(model="o4-mini", reasoning_effort="high", api_key=os.getenv("OPENAI_API_KEY"))
 
+
+def relevance_to_SOX_and_financial_standards(state: State):
+    logger.info("🔍 Starting relevance to SOX and financial standards...")
+    
+    messages = [
+        SystemMessage(content=RELEVANCE_TO_SOX_AND_FINANCIAL_STANDARDS_PROMPT),
+        HumanMessage(content=str(state.tasks_raw))
+    ]
+
+    response = model.with_structured_output(RelevanceToSoxAndFinancialStandards).invoke(messages)
+    state.relevance_to_sox_and_financial_standards = response
+    return state
 
 def metadata_extractor(state: State):
     logger.info("🔍 Starting metadata extraction from files...")
@@ -192,6 +205,13 @@ def reporter(state: State):
         total_outputs = len(state.execution_task_output)
         logger.info(f"📋 Generating report from {total_outputs} task executions")
 
+        if not state.relevance_to_sox_and_financial_standards.is_relevant:
+            state.reporter = "The given tasks are not relevant to SOX and financial standards, because of " + state.relevance_to_sox_and_financial_standards.reason
+            logger.info("✅ Final report generated successfully!")
+            logger.info(f"📄 Report length: {len(state.reporter)} characters")
+            logger.info(f"📊 Report preview: {state.reporter[:200]}..." if len(state.reporter) > 200 else f"📊 Report: {state.reporter}")
+            return state
+
         messages = [
             SystemMessage(content=REPORTER_PROMPT),
             HumanMessage(content=str(state.execution_task_output))
@@ -225,3 +245,14 @@ def should_continue(state: State):
     else:
         logger.info("🏁 Maximum iterations reached, stopping reflection...")
         return 'stop' 
+
+
+def is_relevant(state: State):
+    logger.info("🔍 Evaluating relevance to SOX and financial standards...")
+    
+    if state.relevance_to_sox_and_financial_standards.is_relevant:
+        logger.info("✅ Task is relevant to SOX and financial standards")
+        return "continue"
+    else:
+        logger.info("❌ Task is not relevant to SOX and financial standards")
+        return "stop"

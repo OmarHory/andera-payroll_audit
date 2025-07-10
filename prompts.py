@@ -17,7 +17,8 @@ Your task is to analyze the file content and return the metadata of the file as 
 """
 
 TASK_PARSER_PROMPT = """
-Given the tasks string, parse them based on the provided schema.
+Given the tasks string, parse them based on the provided schema. 
+Do not change the content of the tasks, only parse them based on the provided schema.
 """
 
 DOCUMENT_TO_TASK_MAPPER_PROMPT = """
@@ -31,6 +32,10 @@ You will get the following information:
 
 You will return the documents that are most relevant to the task in which the task is executed, check the file name and content of the documents to determine if they are relevant to the task.
 
+Sometimes, the name of the document is not enough to determine if it is relevant to the task, so you will check the content of the document to determine if it is relevant to the task.
+
+Make sure that the documents are needed to execute the task only and not more.
+
 Return the output based on the provided schema.
 """
 
@@ -42,6 +47,8 @@ Your task is to execute the task based on the provided documents.
 If there is any discrepancy in the documents, you will return the output as "FAIL" and the reason for the failure.
 
 Your output should include details, numbers, row numbers (if applicable), and any other information that is relevant to the task. Be as detailed as possible.
+
+in your output, include the file names that are used to execute the task.
 
 You will get the following information:
 - The task
