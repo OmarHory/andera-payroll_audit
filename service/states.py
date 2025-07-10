@@ -19,12 +19,13 @@ class Tasks(BaseModel):
 
 class DocumentToTaskMapper(BaseModel):
     docs: List[DocumentWithMetadata] = Field(description="The documents that are most relevant to the task", default=[])
-    task: str = Field(description="The id of the task", default="")
+    task: str = Field(description="The description of the task", default="")
 
 class ExecutionAgent(BaseModel):
-    task: str = Field(description="The id of the task", default="")
+    task: str = Field(description="The description of the task", default="")
     output: str = Field(description="The output of the task", default="")
     pass_or_fail: str = Field(description="PASS if the task is executed successfully, FAIL if the task is not executed successfully", default="")
+    file_name: str = Field(description="The name of the file", default="")
 
 class Reporter(BaseModel):
     output: str = Field(description="The output of the task", default="")

@@ -3,7 +3,7 @@ import fitz
 import pandas as pd
 import base64
 from openai import OpenAI
-from service.prompts import VISION_IMAGE_PROMPT
+# from service.prompts import VISION_IMAGE_PROMPT
 import csv
 import mimetypes
 
@@ -11,6 +11,18 @@ import dotenv
 dotenv.load_dotenv()
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+VISION_IMAGE_PROMPT = """
+You are an intelligent assistant specialized in extracting structured information from images.
+
+Your task is to analyze the provided image and return only the extracted content — do not include any commentary, explanations, or greetings.
+
+If the image contains a table, prefix each row with a label such as "Row 1:", "Row 2:", and so on.
+
+Preserve any introductory or header text exactly as it appears.
+
+Return the output in a clean, readable format.
+"""
 
 def parse_directory_files(directory_path):
     parsed_files = []

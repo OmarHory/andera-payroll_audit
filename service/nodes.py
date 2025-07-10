@@ -17,7 +17,8 @@ import dotenv
 
 dotenv.load_dotenv()
 
-model = ChatOpenAI(model="o4-mini", reasoning_effort="high", api_key=os.getenv("OPENAI_API_KEY"))
+    
+model = ChatOpenAI(model=os.getenv("MODEL_NAME"), reasoning_effort=os.getenv("REASONING_EFFORT"), api_key=os.getenv("OPENAI_API_KEY"))
 
 
 def relevance_to_SOX_and_financial_standards(state: State):

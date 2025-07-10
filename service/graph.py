@@ -1,4 +1,5 @@
 import time
+import os
 from typing import List
 from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.redis import RedisSaver
@@ -40,7 +41,7 @@ def build_graph():
         
         
         try:
-            with RedisSaver.from_conn_string(REDIS_URI) as checkpointer:
+            with RedisSaver.from_conn_string(os.getenv("REDIS_URI")) as checkpointer:
                 checkpointer.setup()
                 graph = builder.compile(checkpointer=checkpointer)
         except Exception as e:
