@@ -9,7 +9,8 @@ wheels/
 # Virtual environments
 .venv
 .env
-data/
+# data/
+data/*
 *.pkl
 
 # Logs
