@@ -13,7 +13,6 @@ from service.nodes import (
     relevance_to_SOX_and_financial_standards,
     is_relevant
 )
-import os
 
 
 def build_graph():
@@ -41,10 +40,9 @@ def build_graph():
         
         
         try:
-            checkpointer = RedisSaver.from_conn_string(os.getenv("REDIS_URI"))
-            checkpointer.setup()
-            graph = builder.compile(checkpointer=checkpointer)
-            logger.info("✅ Graph compiled with Redis checkpointing enabled")
+            with RedisSaver.from_conn_string(REDIS_URI) as checkpointer:
+                checkpointer.setup()
+                graph = builder.compile(checkpointer=checkpointer)
         except Exception as e:
             logger.warning(f"⚠️ Redis not available, running without checkpointing: {e}")
             graph = builder.compile()
