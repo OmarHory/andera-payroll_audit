@@ -176,10 +176,9 @@ def reporter(state: State):
         state.reporter = "The given tasks are not relevant to SOX and financial standards, because of " + state.relevance_to_sox_and_financial_standards.reason
         return state
 
-    task_report=""  
     state.reporter = ""
     for item in state.execution_task_output:
-        task_report += "Task: " + str(item.task) + "\n" + "Output: " + str(item.output) + "\n" + "Pass or Fail: " + str(item.pass_or_fail) + "\n\n"
+        task_report = "Task: " + str(item.task) + "\n" + "Output: " + str(item.output) + "\n" + "Pass or Fail: " + str(item.pass_or_fail) + "\n\n"
     
         messages = [
             SystemMessage(content=REPORTER_PROMPT),
@@ -187,7 +186,7 @@ def reporter(state: State):
         ]
 
         response = model.with_structured_output(Reporter).invoke(messages)
-        state.reporter += "\n\n---\n\n" + response.output + "\n\n---\n\n"
+        state.reporter += "***********\n" + response.output + "***********\n"
 
     logger.info("✅ Final report generated successfully!")
     logger.info(f"📄 Report length: {len(state.reporter)} characters")
