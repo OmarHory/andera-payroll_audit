@@ -1,0 +1,1 @@
+streamlit run ui/app.py --server.headless true --server.port 8503 --server.address 0.0.0.0

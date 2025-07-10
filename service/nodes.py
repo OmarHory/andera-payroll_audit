@@ -1,7 +1,6 @@
 import os
-from typing import List
-from states import State, DocMetadata, Tasks, DocumentWithMetadata, DocumentToTaskMapper, ExecutionAgent, Reporter, RelevanceToSoxAndFinancialStandards
-from prompts import (
+from service.states import State, DocMetadata, Tasks, DocumentWithMetadata, DocumentToTaskMapper, ExecutionAgent, Reporter, RelevanceToSoxAndFinancialStandards
+from service.prompts import (
     METADATA_EXTRACTOR_PROMPT, 
     TASK_PARSER_PROMPT, 
     DOCUMENT_TO_TASK_MAPPER_PROMPT,
@@ -10,7 +9,7 @@ from prompts import (
     REFLECTOR_PROMPT,
     RELEVANCE_TO_SOX_AND_FINANCIAL_STANDARDS_PROMPT,
 )
-from parsers import parse_directory_files
+from service.parsers import parse_directory_files
 from langchain_core.messages import SystemMessage, HumanMessage
 from langchain_openai import ChatOpenAI
 from service.logger import logger

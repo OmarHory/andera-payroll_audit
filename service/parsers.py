@@ -3,7 +3,7 @@ import fitz
 import pandas as pd
 import base64
 from openai import OpenAI
-from prompts import VISION_IMAGE_PROMPT
+from service.prompts import VISION_IMAGE_PROMPT
 import csv
 import mimetypes
 

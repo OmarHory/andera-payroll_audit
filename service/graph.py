@@ -2,7 +2,7 @@ import time
 from typing import List
 from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.redis import RedisSaver
-from states import State
+from service.states import State
 from service.logger import logger
 from service.nodes import (
     metadata_extractor, 
