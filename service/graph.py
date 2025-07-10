@@ -78,6 +78,8 @@ def invoke(thread_id: str, data_path: str, tasks: List[str]) -> dict:
         
         logger.info("🚀 Invoking graph execution...")
         start_time = time.time()
+
+        graph = compile_graph()
         
         result = graph.invoke(
             initial_state,
@@ -87,11 +89,11 @@ def invoke(thread_id: str, data_path: str, tasks: List[str]) -> dict:
         execution_time = time.time() - start_time
         logger.info(f"⏱️ Graph execution completed in {execution_time:.2f} seconds")
         
-        success = bool(result.reporter and len(result.execution_task_output) > 0)
+        success = bool(result["reporter"] and len(result["execution_task_output"]) > 0)
         logger.info(f"✅ Execution success: {success}")
         
         execution_details = []
-        for task_output in result.execution_task_output:
+        for task_output in result["execution_task_output"]:
             execution_details.append({
                 "task": task_output.task,
                 "output": task_output.output,
@@ -100,10 +102,10 @@ def invoke(thread_id: str, data_path: str, tasks: List[str]) -> dict:
         
         response = {
             "success": success,
-            "report": result.reporter,
+            "report": result["reporter"],
             "execution_details": execution_details,
-            "documents_processed": len(result.docs_content_with_metadata),
-            "tasks_count": len(result.tasks_parsed.tasks) if result.tasks_parsed else 0,
+            "documents_processed": len(result["docs_content_with_metadata"]),
+            "tasks_count": len(result["tasks_parsed"].tasks) if result["tasks_parsed"] else 0,
             "execution_time": execution_time
         }
         

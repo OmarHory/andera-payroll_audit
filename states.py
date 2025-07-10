@@ -29,6 +29,10 @@ class ExecutionAgent(BaseModel):
 class Reporter(BaseModel):
     output: str = Field(description="The output of the task", default="")
 
+class RelevanceToSoxAndFinancialStandards(BaseModel):
+    is_relevant: bool = Field(description="Whether the task is relevant to SOX and financial standards", default=False)
+    reason: str = Field(description="The reason for the relevance", default="")
+
 class State(BaseModel):
     data_path: str = Field(description="The path to the data", default="") #input
     tasks_raw: str = Field(description="The raw tasks", default="") #input
@@ -47,4 +51,5 @@ class State(BaseModel):
     task_current_iteration: int = Field(description="The current iteration of the task", default=0)
 
     is_in_reflection: bool = Field(description="Whether the agent is in reflection", default=False)
+    relevance_to_sox_and_financial_standards: RelevanceToSoxAndFinancialStandards = Field(description="The relevance to SOX and financial standards", default=RelevanceToSoxAndFinancialStandards(is_relevant=True, reason=""))
 

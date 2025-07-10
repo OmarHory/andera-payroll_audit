@@ -1,5 +1,5 @@
 import os
-import fitz  # PyMuPDF
+import fitz
 import pandas as pd
 import base64
 from openai import OpenAI
@@ -69,7 +69,6 @@ def parse_excel(file_path):
     for sheet_name, df in excel_data.items():
         rows = df.values.tolist()
 
-        # Step 1: Find first valid row (based on number of non-empty cells)
         start_idx = None
         for i, row in enumerate(rows):
             non_empty_count = sum(1 for cell in row if str(cell).strip() and str(cell).lower() != 'nan')
@@ -78,17 +77,16 @@ def parse_excel(file_path):
                 break
 
         if start_idx is None:
-            continue  # skip if no good row
+            continue
 
         table_rows = rows[start_idx:]
 
-        # Step 2: Clean each row and add row numbers
         cleaned_rows = []
         for i, row in enumerate(table_rows):
             str_row = [str(cell).strip() if pd.notna(cell) else '' for cell in row]
             while str_row and str_row[-1] == '':
                 str_row.pop()
-            if any(str_row):  # skip empty
+            if any(str_row):
                 row_number = f"Row {i+1}"
                 cleaned_rows.append(f"{row_number}," + ','.join(str_row))
 
@@ -103,27 +101,23 @@ def parse_csv(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
         lines = list(csv.reader(f))
 
-    # Heuristic: a real table starts where a row has at least N non-empty cells
     table_start_index = None
     for i, row in enumerate(lines):
         non_empty_count = sum(1 for cell in row if cell.strip())
-        if non_empty_count >= 4:  # configurable threshold
+        if non_empty_count >= 4:
             table_start_index = i
             break
 
     if table_start_index is None:
         return "[No valid table found]"
 
-    # Clean rows: trim whitespace and remove trailing empty fields
     clean_rows = []
     for row in lines[table_start_index:]:
-        # Remove trailing empty cells
         while row and row[-1].strip() == '':
             row.pop()
-        if any(cell.strip() for cell in row):  # skip fully empty rows
+        if any(cell.strip() for cell in row):
             clean_rows.append(','.join(cell.strip() for cell in row))
 
-    # Add row numbers
     numbered_rows = [f"Row {i+1}," + row for i, row in enumerate(clean_rows)]
     return '\n'.join(numbered_rows)
 
@@ -161,4 +155,3 @@ def parse_image_with_vision(image_path):
     )
 
     return response.output_text.strip()
-
