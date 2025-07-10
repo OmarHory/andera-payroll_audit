@@ -12,7 +12,7 @@ REASONING_EFFORTS="high"  # (or None if you are using a non-reasoning model like
 ```
 
 ```bash
-uv venv
+uv venv # make sure to have uv installed, check (https://docs.astral.sh/uv/getting-started/installation/)
 source .venv/bin/activate
 uv sync
 
